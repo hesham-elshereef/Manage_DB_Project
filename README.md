@@ -11,6 +11,7 @@ A lightweight, modular, directory-based Database Management System (DBMS) writte
 - **Table Management:** Create and delete tables (stored as files within database directories).
 - **Database Connection:** Connect to a specific database environment to execute table-level operations.
 - **Modular Architecture:** Clean separation of concerns with functions split across independent files and loaded via `source`.
+```
 
 ---
 
