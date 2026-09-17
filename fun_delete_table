@@ -1,0 +1,24 @@
+function delete_table () {
+    while true ; do
+        read -p "Enter the database name to delete the table from: " DB
+        if [[ -z "$DB" ]];  then
+                echo "Error: Database name cannot be empty!"
+        elif [[ ! -d "./DataBase/$DB" ]] ;    then    
+            echo "Error: This database does not exist"
+        else    
+            while true ; do
+                read -p "Enter Table name : " table
+                if [[ -z "$table" ]];   then
+                    echo "Error: Table name cannot be empty!"
+                elif [[ ! -f "./DataBase/$DB/$table" ]] ;  then
+                    echo "Error: This table doesn't exist "
+                else
+                    rm -f "./DataBase/$DB/$table"
+                    echo "Table '$table' deleted successfully from '$DB'."
+                    break
+                fi
+            done
+            break
+        fi
+    done
+}

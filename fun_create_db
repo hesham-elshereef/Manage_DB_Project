@@ -1,0 +1,19 @@
+function Create_DB () {
+    read -p "Enter DB name : " DB
+    while true ; do
+        if [[ ! "$DB" =~ ^[a-zA-Z][a-zA-Z0-9_]*$ ]]; then
+            echo "Error: Name must start with an English letter and contain only letters, numbers, or underscores."
+            read -p "Enter DB name : " DB
+        elif [[ -z "$DB" ]] ;  then
+            echo "Error: Database name cannot be empty!"
+            read -p "Enter DB name : " DB
+        elif [[ -d "./DataBase/$DB" || -f "./DataBase/$DB" ]];    then    
+            echo "This name already exists "
+            read -p "Enter DB name : " DB
+        else    
+            mkdir -p "./DataBase/$DB"
+            echo "Database '$DB' created successfully."
+            break
+        fi
+    done
+}

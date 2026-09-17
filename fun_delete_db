@@ -1,0 +1,16 @@
+function Delete_DB () {
+    read -p "Enter DB name : " DB 
+    while true ; do
+        if [[ -z "$DB" ]]  ;  then
+            echo "Error: Database name cannot be empty!"
+            read -p "Enter DB name : " DB 
+        elif [[ ! -d "./DataBase/$DB" ]]  ;  then    
+            echo " This database does not exist"
+            read -p "Enter DB name : " DB 
+        else    
+            rm -rf "./DataBase/$DB"
+            echo "Database '$DB' deleted successfully."
+            break
+        fi
+    done
+}

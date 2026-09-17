@@ -1,0 +1,110 @@
+function connect_to_db () {
+    while true ; do
+                read -p "Enter the database name to connect it: " DB
+                if [[ -z "$DB" ]];   then
+                        echo "Error: Database name cannot be empty!"
+                elif [[ ! -d "./DataBase/$DB" ]] ;   then    
+                    echo "Error: This database does not exist"
+                else  
+                    while true ; do  
+                        read -p "Enter Table name : " table
+                        if [[ -z "$table" ]];  then
+                            echo "Error: Table name cannot be empty!"
+                        elif [[ ! -f "./DataBase/$DB/$table" ]] ;  then
+                            echo "Error: This table doesn't exist "
+                        else
+                            PS3="Chose one choice please "
+                            arr2=("Create row" "Insert in row" "Select(search)" "Delete row" "Exit")
+                            select option in "${arr2[@]}"
+                            do 
+                                case "$option" in
+                                    "Create row") 
+                                        while true ; do
+                                            read -p "Enter name : "  name
+                                            read -p "Enter id : "  id
+                                            read -p "Enter phone number : "  phone
+                                            if [[ -z "$name"  ||  -z "$id"  ||  -z "$phone" ]]  then
+                                                echo "Error: name and id and phone number can't be empty" 
+                                            elif [[ ! "$id" =~ ^[0-9]+$ || ! "$phone" =~ ^[0-9]+$ ]]; then
+                                                echo "Error: ID and Phone number must contain numbers only!" 
+                                            elif [[ ! "$name" =~ ^[a-zA-Z][a-zA-Z0-9_]*$ ]]; then
+                                                echo "Error: Name must start with an English letter and contain only letters, numbers, or underscores."
+                                            elif awk -F: -v search="$id" ' $2 == search  {found=1} END{exit !found} '   "./DataBase/$DB/$table" ; then
+                                                echo "Error: This id $id is already exists";
+                                            else 
+                                                echo "$name:$id:$phone"  >>  "./DataBase/$DB/$table" ;
+                                                echo "Congrats! The row added successfully" ;
+                                                break
+
+                                            fi
+                                        done
+                                        ;;
+                                    "Insert in row")
+                                        while true ; do
+                                            read -p "Enter your id : " id
+                                            if [[ -z "$id"  ]]; then
+                                                echo "Error: id can't be empty "  
+                                            elif [[ ! "$id" =~ ^[0-9]+$ ]]; then
+                                                echo "Error: ID must contain numbers only!" 
+                                            elif awk -F: -v search="$id" ' $2 == search  {found=1} END{exit found} '   "./DataBase/$DB/$table" ; then
+                                                echo "Error: This id $id doesn't exist";
+                                            else
+                                                read -p "Enter comment to add : " NEWFIELD
+                                                #line=$(grep -n -w "$id" "./DataBase/$DB/$table"  |  cut -d: -f1)
+                                                line=$(awk -F: -v search="$id" ' $2 == search  { print NR } '  "./DataBase/$DB/$table" )
+                                                echo "line=[$line]"
+                                                sed -i  "$line s/$/:$NEWFIELD/"  "./DataBase/$DB/$table" 
+                                                echo "congrats!" ;
+                                                break
+                                            fi
+                                        done
+                                        ;;
+                                    "Select(search)")
+                                        while true ; do
+                                            read -p "Enter id to search : "  id
+                                            if [[ -z "$id"  ]];  then
+                                                echo "Error: id can't be empty " 
+                                            elif [[ ! "$id" =~ ^[0-9]+$ ]]; then
+                                                echo "Error: ID must contain numbers only!" 
+                                            elif awk -F: -v search="$id" ' $2 == search  {found=1} END{exit found} '   "./DataBase/$DB/$table" ; then
+                                                echo "Error: This id '$id' doesn't exist";
+                                            else
+                                            #    sed -n "/$id/p" "./DataBase/$DB/$table"  ->  wrong because it will print any line contains number that match "$id"
+                                                awk -F: -v search="$id" ' $2 == search  {print $0} '   "./DataBase/$DB/$table"
+                                                break
+                                            fi
+                                        done
+                                        ;;
+                                    "Delete row")
+                                        while true ; do
+                                            read -p "Enter your id to delete your row : " id
+                                            if [[ -z "$id"  ]];  then
+                                                echo "Error: id can't be empty "  
+                                            elif [[ ! "$id" =~ ^[0-9]+$ ]]; then
+                                                echo "Error: ID must contain numbers only!" 
+                                            elif awk -F: -v search="$id" ' $2 == search  {found=1} END{exit found} '   "./DataBase/$DB/$table" ; then
+                                                echo "Error: This id '$id' doesn't exist";
+                                            else
+                                                line=$(awk -F: -v search="$id" ' $2 == search  { print NR } '  "./DataBase/$DB/$table" )
+                                                echo "line=[$line]"
+                                                sed -i "$line d"  "./DataBase/$DB/$table"
+                                                echo "Valid ID and deleted row successfully"
+                                                break
+                                            fi
+                                        done
+                                        ;;
+                                    "Exit")
+                                        break
+                                        ;;
+                                    *)  
+                                        echo "Invalid option, please try again." 
+                                        ;;
+                                esac
+                            done
+                            break
+                        fi                
+                    done
+                    break
+                fi
+            done
+}
