@@ -27,12 +27,12 @@ manage_db_project/
 └── fun_connect_to_db     # Function to handle database connection/context
 
 
-⚙️ Prerequisites
+## ⚙️ Prerequisites
 A Linux environment or Unix-like shell (Bash v4+ recommended).
 
 Git installed for version control.
 
-🏃‍♂️ How to Run
+## 🏃‍♂️ How to Run
 Clone the repository:
 
 Bash
