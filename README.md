@@ -25,3 +25,42 @@ manage_db_project/
 ├── fun_create_table      # Function to create a new table file
 ├── fun_delete_table      # Function to delete a table file
 └── fun_connect_to_db     # Function to handle database connection/context
+
+---
+
+## ⚙️ Prerequisites
+
+- Linux environment or Unix-like shell
+- Bash v4+ recommended
+- Git installed for version control
+
+---
+
+## 🏃‍♂️ How to Run
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/hesham-elshereef/Manage_DB_Project.git
+cd Manage_DB_Project
+```
+
+### 2. Give execution permissions
+
+```bash
+chmod +x manage_db.sh
+```
+
+### 3. Run the application
+
+```bash
+./manage_db.sh
+```
+
+---
+
+## 👨‍💻 Author
+
+**Hesham Elshereef**  
+DevOps Engineer
+GitHub: [@hesham-elshereef](https://github.com/hesham-elshereef)
